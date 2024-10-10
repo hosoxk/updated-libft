@@ -3,9 +3,9 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g3
 AR = ar rcs
 RM = rm -fr
-SRC_DIR = /sources
-GNL_DIR = /sources/get_next_line
-PRINTF_DIR = /sources/ft_printf
+SRC_DIR = sources
+GNL_DIR = $(SRC_DIR)/get_next_line
+PRINTF_DIR = $(SRC_DIR)/ft_printf
 SRC = $(SRC_DIR)/ft_isalpha.c \
 	$(SRC_DIR)/ft_isdigit.c \
 	$(SRC_DIR)/ft_isalnum.c \
@@ -60,7 +60,6 @@ SRCB = $(SRC_DIR)/ft_lstnew_bonus.c \
 	$(GNL_DIR)/get_next_line_utils_bonus.c
 
 OBJS = ${SRC:.c=.o}
-
 OBJSB = ${SRCB:.c=.o}
 
 .c.o:
@@ -70,16 +69,22 @@ ${NAME}: ${OBJS}
 	${AR} ${NAME} ${OBJS}
 
 all: ${NAME}
+	$(MAKE) -C $(PRINTF_DIR)
+	cp $(PRINTF_DIR)/libftprintf.a ./ft_printf.a
+	$(AR) $(NAME) ft_printf.a
+	
 
 bonus: ${NAME} ${OBJSB}
-		${AR} ${NAME} ${OBJSB}
+	${AR} ${NAME} ${OBJSB}
 
 clean:
-	${RM} ${OBJS} ${OBJSB}
-	echo "Deleting .o files"
+	$(RM) $(OBJS) $(OBJSB)
+	$(MAKE) clean -C $(PRINTF_DIR)
+	echo "deleting .o files"
 
 fclean: clean
-		${RM} ${NAME} ${bonus}
-		echo "Deleting .o files & ${NAME}"
+	$(RM) $(NAME) $(bonus) ft_printf.a
+	$(MAKE) fclean -C $(PRINTF_DIR)
+	echo "deleting .o files & $(NAME)"
 
 re: fclean all
