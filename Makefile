@@ -1,11 +1,25 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: yde-rudd <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/10/25 18:01:07 by yde-rudd          #+#    #+#              #
+#    Updated: 2024/10/25 18:11:55 by yde-rudd         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = libft.a
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g3
 AR = ar rcs
 RM = rm -fr
-SRC_DIR = sources
+
+SRC_DIR = ./sources
 GNL_DIR = $(SRC_DIR)/get_next_line
 PRINTF_DIR = $(SRC_DIR)/ft_printf
+
 SRC = $(SRC_DIR)/ft_isalpha.c \
 	$(SRC_DIR)/ft_isdigit.c \
 	$(SRC_DIR)/ft_isalnum.c \
@@ -58,9 +72,16 @@ SRCB = $(SRC_DIR)/ft_lstnew_bonus.c \
 	$(SRC_DIR)/ft_lstmap_bonus.c \
 	$(GNL_DIR)/get_next_line_bonus.c \
 	$(GNL_DIR)/get_next_line_utils_bonus.c
+PRINTF_SRC = $(PRINTF_DIR)/ft_printf.c \
+			 $(PRINTF_DIR)/ft_printf_char.c \
+			 $(PRINTF_DIR)/ft_printf_int.c \
+			 $(PRINTF_DIR)/ft_printf_string.c \
+			 $(PRINTF_DIR)/ft_printf_hexa.c \
+			 $(PRINTF_DIR)/ft_printf_pointer.c \
+			 $(PRINTF_DIR)/ft_printf_unsigned.c
 
-OBJS = ${SRC:.c=.o}
-OBJSB = ${SRCB:.c=.o}
+OBJS = $(SRC:.c=.o) $(PRINTF_SRC:.c=.o)
+OBJSB = $(SRCB:.c=.o)
 
 .c.o:
 	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
@@ -69,10 +90,6 @@ ${NAME}: ${OBJS}
 	${AR} ${NAME} ${OBJS}
 
 all: ${NAME}
-	$(MAKE) -C $(PRINTF_DIR)
-	cp $(PRINTF_DIR)/libftprintf.a ./ft_printf.a
-	$(AR) $(NAME) ft_printf.a
-	
 
 bonus: ${NAME} ${OBJSB}
 	${AR} ${NAME} ${OBJSB}
@@ -83,8 +100,9 @@ clean:
 	echo "deleting .o files"
 
 fclean: clean
-	$(RM) $(NAME) $(bonus) ft_printf.a
-	$(MAKE) fclean -C $(PRINTF_DIR)
+	$(RM) $(NAME) $(bonus)
 	echo "deleting .o files & $(NAME)"
 
 re: fclean all
+
+.PHONY: all clean fclean re
