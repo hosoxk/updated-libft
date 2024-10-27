@@ -59,9 +59,7 @@ SRC = $(SRC_DIR)/ft_isalpha.c \
 	$(SRC_DIR)/ft_putnbr_fd.c \
 	$(SRC_DIR)/ft_cpyarr.c \
 	$(SRC_DIR)/ft_freearr.c \
-	$(GNL_DIR)/get_next_line.c \
-	$(GNL_DIR)/get_next_line_utils.c
-SRCB = $(SRC_DIR)/ft_lstnew_bonus.c \
+	$(SRC_DIR)/ft_lstnew_bonus.c \
 	$(SRC_DIR)/ft_lstadd_front_bonus.c \
 	$(SRC_DIR)/ft_lstsize_bonus.c \
 	$(SRC_DIR)/ft_lstlast_bonus.c \
@@ -70,6 +68,8 @@ SRCB = $(SRC_DIR)/ft_lstnew_bonus.c \
 	$(SRC_DIR)/ft_lstclear_bonus.c \
 	$(SRC_DIR)/ft_lstiter_bonus.c \
 	$(SRC_DIR)/ft_lstmap_bonus.c \
+	$(GNL_DIR)/get_next_line.c \
+	$(GNL_DIR)/get_next_line_utils.c
 	$(GNL_DIR)/get_next_line_bonus.c \
 	$(GNL_DIR)/get_next_line_utils_bonus.c
 PRINTF_SRC = $(PRINTF_DIR)/ft_printf.c \
@@ -81,7 +81,6 @@ PRINTF_SRC = $(PRINTF_DIR)/ft_printf.c \
 			 $(PRINTF_DIR)/ft_printf_unsigned.c
 
 OBJS = $(SRC:.c=.o) $(PRINTF_SRC:.c=.o)
-OBJSB = $(SRCB:.c=.o)
 
 .c.o:
 	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
@@ -91,16 +90,13 @@ ${NAME}: ${OBJS}
 
 all: ${NAME}
 
-bonus: ${NAME} ${OBJSB}
-	${AR} ${NAME} ${OBJSB}
-
 clean:
-	$(RM) $(OBJS) $(OBJSB)
+	$(RM) $(OBJS)
 	$(MAKE) clean -C $(PRINTF_DIR)
 	echo "deleting .o files"
 
 fclean: clean
-	$(RM) $(NAME) $(bonus)
+	$(RM) $(NAME)
 	echo "deleting .o files & $(NAME)"
 
 re: fclean all
