@@ -15,10 +15,15 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g3
 AR = ar rcs
 RM = rm -fr
+MAKEFLAGS += -s
 
 SRC_DIR = ./sources
 GNL_DIR = $(SRC_DIR)/get_next_line
 PRINTF_DIR = $(SRC_DIR)/ft_printf
+
+YELLOW = \033[1;33m
+GREEN = \033[1;32m
+RESET = \033[0m
 
 SRC = $(SRC_DIR)/ft_isalpha.c \
 	$(SRC_DIR)/ft_isdigit.c \
@@ -59,19 +64,17 @@ SRC = $(SRC_DIR)/ft_isalpha.c \
 	$(SRC_DIR)/ft_putnbr_fd.c \
 	$(SRC_DIR)/ft_cpyarr.c \
 	$(SRC_DIR)/ft_freearr.c \
-	$(SRC_DIR)/ft_lstnew_bonus.c \
-	$(SRC_DIR)/ft_lstadd_front_bonus.c \
-	$(SRC_DIR)/ft_lstsize_bonus.c \
-	$(SRC_DIR)/ft_lstlast_bonus.c \
-	$(SRC_DIR)/ft_lstadd_back_bonus.c \
-	$(SRC_DIR)/ft_lstdelone_bonus.c \
-	$(SRC_DIR)/ft_lstclear_bonus.c \
-	$(SRC_DIR)/ft_lstiter_bonus.c \
-	$(SRC_DIR)/ft_lstmap_bonus.c \
+	$(SRC_DIR)/ft_lstnew.c \
+	$(SRC_DIR)/ft_lstadd_front.c \
+	$(SRC_DIR)/ft_lstsize.c \
+	$(SRC_DIR)/ft_lstlast.c \
+	$(SRC_DIR)/ft_lstadd_back.c \
+	$(SRC_DIR)/ft_lstdelone.c \
+	$(SRC_DIR)/ft_lstclear.c \
+	$(SRC_DIR)/ft_lstiter.c \
+	$(SRC_DIR)/ft_lstmap.c \
 	$(GNL_DIR)/get_next_line.c \
 	$(GNL_DIR)/get_next_line_utils.c
-	$(GNL_DIR)/get_next_line_bonus.c \
-	$(GNL_DIR)/get_next_line_utils_bonus.c
 PRINTF_SRC = $(PRINTF_DIR)/ft_printf.c \
 			 $(PRINTF_DIR)/ft_printf_char.c \
 			 $(PRINTF_DIR)/ft_printf_int.c \
@@ -83,21 +86,26 @@ PRINTF_SRC = $(PRINTF_DIR)/ft_printf.c \
 OBJS = $(SRC:.c=.o) $(PRINTF_SRC:.c=.o)
 
 .c.o:
+	@echo "$(YELLOW)Compiling $<...$(RESET)"
 	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}: ${OBJS}
+	@echo "$(YELLOW)Creating library $(NAME)...$(RESET)"
 	${AR} ${NAME} ${OBJS}
+	@echo "$(GREEN)Library $(NAME) created successfully!$(RESET)"
 
 all: ${NAME}
 
 clean:
+	@echo "$(YELLOW)Cleaning object files...$(RESET)"
 	$(RM) $(OBJS)
 	$(MAKE) clean -C $(PRINTF_DIR)
-	echo "deleting .o files"
+	@echo "$(GREEN)Object files cleaned!$(RESET)"
 
 fclean: clean
+	@echo "$(YELLOW)Removing $(NAME) library...$(RESET)"
 	$(RM) $(NAME)
-	echo "deleting .o files & $(NAME)"
+	@echo "$(GREEN)Library $(NAME) removed!$(RESET)"
 
 re: fclean all
 

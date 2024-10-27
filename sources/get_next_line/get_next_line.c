@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yde-rudd <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 22:26:17 by yde-rudd          #+#    #+#             */
-/*   Updated: 2024/10/02 21:37:55 by yde-rudd         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:08:08 by yde-rudd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,15 @@
 char	*get_next_line(int fd)
 {
 	char			*new_line;
-	static char		*buffer;
+	static char		*buffer[4096];
 
 	if (fd < 0 || fd > 4096 || BUFFER_SIZE <= 0 || read (fd, 0, 0) < 0)
-	{
-		if (buffer)
-		{
-			free(buffer);
-			buffer = NULL;
-		}
 		return (NULL);
-	}
-	buffer = read_from_file(fd, buffer);
-	if (!buffer)
+	buffer[fd] = read_from_file(fd, buffer[fd]);
+	if (!buffer[fd])
 		return (NULL);
-	new_line = line_from_buffer(buffer);
-	buffer = update_buffer(buffer);
+	new_line = line_from_buffer(buffer[fd]);
+	buffer[fd] = update_buffer(buffer[fd]);
 	return (new_line);
 }
 
@@ -80,11 +73,11 @@ char	*line_from_buffer(char *buffer)
 	int		length;
 	int		allocate_length;
 
+	length = 0;
 	if (!buffer)
 		return (NULL);
 	if (!buffer[0])
 		return (NULL);
-	length = 0;
 	while (buffer[length] && buffer[length] != '\n')
 		length++;
 	allocate_length = length + 1;

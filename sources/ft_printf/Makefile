@@ -35,11 +35,9 @@ all: ${NAME}
 
 clean:
 	${RM} ${OBJS}
-	echo "Deleting .o files."
 
 fclean: clean
 	${RM} ${NAME}
-	echo "Deleting .o files & ${NAME}"
 
 re: fclean all
 
